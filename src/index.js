@@ -1,13 +1,10 @@
 const puppeteer = require('puppeteer');
-const config = require('../config');
 const fs = require('fs');
 const Rob = require('workwechat-bot').default;
 const {
   saveImageToLocal, decodeLoginCode, createTerminalCode, wait, resolve, compareVersions, sleep,
 } = require('./utils');
 const md5 = require('md5');
-
-const rob = new Rob(config.wxCompanyRobots);
 
 class AuditTask {
   auditing = false;
@@ -20,8 +17,14 @@ class AuditTask {
 
   keepSessionTaskTimer = null;
 
+  bot = {};
+
   constructor(config) {
     this.config = config;
+
+    const bot = new Rob(config.wxCompanyRobots);
+
+    this.bot = bot;
   }
 
   async bootstrap() {
@@ -49,12 +52,12 @@ class AuditTask {
     const succeed = await this.checkSubmitAuditSuccess();
 
     if (succeed) {
-      rob.text('提审成功').send();
+      bot.text('提审成功').send();
 
       const qrBase64 = fs.readFileSync(resolve(__dirname, '../cache/audit_screenshot.png'), 'base64');
-      rob.image(qrBase64, md5(fs.readFileSync(resolve(__dirname, '../cache/audit_screenshot.png')))).send();
+      bot.image(qrBase64, md5(fs.readFileSync(resolve(__dirname, '../cache/audit_screenshot.png')))).send();
     } else {
-      rob.text('提审失败');
+      bot.text('提审失败');
     }
 
     await this.keepSession();
@@ -155,8 +158,8 @@ class AuditTask {
     const savePath = await saveImageToLocal(loginCodeImageLink, page);
 
     // const qrBase64 = fs.readFileSync(savePath, 'base64');
-    // rob.image(qrBase64, md5(fs.readFileSync(savePath)));
-    // rob.text('开始提审，请扫码登录公众平台').send();
+    // bot.image(qrBase64, md5(fs.readFileSync(savePath)));
+    // bot.text('开始提审，请扫码登录公众平台').send();
 
     // 解码
     let decodeText = null;

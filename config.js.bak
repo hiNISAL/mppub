@@ -1,0 +1,20 @@
+const path = require('path');
+
+const uploadImageLocalPath = [];
+
+const uploadVideoLocalPath = [];
+
+const wxCompanyRobots = [
+];
+
+module.exports = {
+  uploadImageLocalPath,
+  uploadVideoLocalPath,
+  desc: '',
+  testAccount: '',
+  testPassword: '',
+  onlyWorkInWxCompany: false,
+  quickAudit: false,
+  wxCompanyRobots,
+  headless: false,
+};

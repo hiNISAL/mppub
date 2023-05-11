@@ -1,0 +1,8 @@
+node_modules
+
+/template/screenshot
+/template/video
+/cache/**/*
+config.js
+
+package-lock.json

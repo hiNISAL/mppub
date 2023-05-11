@@ -1,0 +1,26 @@
+{
+  "name": "mppub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon ./app.js"
+  },
+  "keywords": [],
+  "author": "ARAM",
+  "license": "MIT",
+  "dependencies": {
+    "download": "^8.0.0",
+    "jimp": "^0.16.1",
+    "md5": "^2.3.0",
+    "puppeteer": "^14.1.1",
+    "qrcode-reader": "^1.0.4",
+    "qrcode-terminal": "^0.12.0",
+    "workwechat-bot": "^1.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

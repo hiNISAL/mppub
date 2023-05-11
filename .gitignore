@@ -2,7 +2,8 @@ node_modules
 
 /template/screenshot
 /template/video
-/cache/**/*
+/cache/audit_screenshot.png
+/cache/login-qrcode/qr.png
 config.js
 
 package-lock.json

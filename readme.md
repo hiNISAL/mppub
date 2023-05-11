@@ -7,6 +7,10 @@ mppub => miniprogrm-publish
 ## 使用
 
 ```shell
+cp config.js.bak config.js
+```
+
+```shell
 npm start
 ```
 

@@ -27,6 +27,13 @@ class AuditTask {
     this.bot = bot;
   }
 
+  onGotLoginQrCode({
+    qrSavePath,
+  }) {
+    const qrBase64 = fs.readFileSync(qrSavePath, 'base64');
+    bot.image(qrBase64, md5(fs.readFileSync(qrSavePath))).send();
+  }
+
   async bootstrap() {
     await this.stopKeepSession();
 
@@ -36,7 +43,12 @@ class AuditTask {
 
     if (!await this.checkLogin()) {
       await this.openHomePage();
-      const terminal = await this.waitForLogin();
+      const [terminal, qrSavePath] = await this.waitForLogin();
+
+      this.onGotLoginQrCode({
+        terminal,
+        qrSavePath,
+      });
 
       console.log(terminal);
     }
@@ -175,7 +187,7 @@ class AuditTask {
     // 生码
     const terminalCode = await createTerminalCode(decodeText);
 
-    return terminalCode;
+    return [terminalCode, savePath];
   }
 
   // -------------------------------------------------------------------------

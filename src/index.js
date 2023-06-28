@@ -31,7 +31,7 @@ class AuditTask {
     qrSavePath,
   }) {
     const qrBase64 = fs.readFileSync(qrSavePath, 'base64');
-    bot.image(qrBase64, md5(fs.readFileSync(qrSavePath))).send();
+    this.bot.image(qrBase64, md5(fs.readFileSync(qrSavePath))).send();
   }
 
   async bootstrap() {

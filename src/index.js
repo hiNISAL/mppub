@@ -1,10 +1,10 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const Rob = require('workwechat-bot').default;
-const {
-  saveImageToLocal, decodeLoginCode, createTerminalCode, wait, resolve, compareVersions, sleep,
-} = require('./utils');
 const md5 = require('md5');
+const {
+  saveImageToLocal, decodeLoginCode, createTerminalCode, wait, sleep, resolve,
+} = require('./utils');
 
 class AuditTask {
   auditing = false;
@@ -64,12 +64,12 @@ class AuditTask {
     const succeed = await this.checkSubmitAuditSuccess();
 
     if (succeed) {
-      bot.text('提审成功').send();
+      this.bot.text('提审成功').send();
 
       const qrBase64 = fs.readFileSync(resolve(__dirname, '../cache/audit_screenshot.png'), 'base64');
-      bot.image(qrBase64, md5(fs.readFileSync(resolve(__dirname, '../cache/audit_screenshot.png')))).send();
+      this.bot.image(qrBase64, md5(fs.readFileSync(resolve(__dirname, '../cache/audit_screenshot.png')))).send();
     } else {
-      bot.text('提审失败');
+      this.bot.text('提审失败').send();
     }
 
     await this.keepSession();
@@ -428,29 +428,29 @@ class AuditTask {
   // -------------------------------------------------------------------------
   // 确认是否审核成功
   async checkSubmitAuditSuccess() {
-    const page = this.currentPage;
+    try {
+      const page = this.currentPage;
 
-    await sleep(10000);
+      await sleep(10000);
 
-    this.openHomePage();
+      await this.openHomePage();
+      await this.waitForLoginRedirect();
+      await this.redirectToVersionManagePage();
 
-    await this.waitForLoginRedirect();
-    await this.redirectToVersionManagePage();
-
-    // $('.code_mod')
-    await wait(() => {
-      return page.evaluate(() => {
-        return document.querySelectorAll('.code_mod').length;
+      await wait(() => {
+        return page.evaluate(() => {
+          return document.querySelectorAll('.code_mod').length;
+        });
       });
-    });
 
-    await page.screenshot({
-      path: path.resolve(__dirname, '../cache/audit_screenshot.png'),
-    });
+      await page.screenshot({
+        path: resolve(__dirname, '../cache/audit_screenshot.png'),
+      });
 
-    return await page.evaluate(() => {
-      return !document.querySelectorAll('.empty_box').length;
-    });
+      return true;
+    } catch (err) {
+      return false
+    }
   }
 }
 

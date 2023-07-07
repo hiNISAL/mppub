@@ -67,7 +67,7 @@ const wait = (condition, times = null) => {
 };
 
 const resolve = (...args) => {
-  return path.resolve(__dirname, ...args);
+  return path.resolve(...args);
 };
 
 const sleep = (time) => {
